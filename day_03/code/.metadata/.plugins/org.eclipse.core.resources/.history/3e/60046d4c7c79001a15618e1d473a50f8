@@ -1,0 +1,25 @@
+package com.example.day03_03_loadcase.utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+public class utils {
+	
+	public static boolean saveInfo(String username, String pwd) {
+		String Info = username + "##" + pwd;
+		File file = new File("data/data/day03_03_loadCase/info.text");
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(Info.getBytes());
+			fos.close();
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+}

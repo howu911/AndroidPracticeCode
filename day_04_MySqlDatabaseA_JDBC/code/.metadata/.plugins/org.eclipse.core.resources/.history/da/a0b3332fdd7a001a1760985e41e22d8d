@@ -1,0 +1,18 @@
+package day04_01_JDBC_helloworld;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.Driver;
+
+public class JdbcHello {
+	
+	public void jdbcHello() {
+		try {
+			DriverManager.registerDriver(new Driver());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

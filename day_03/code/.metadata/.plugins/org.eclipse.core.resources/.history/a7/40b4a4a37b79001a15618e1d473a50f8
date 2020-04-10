@@ -1,0 +1,15 @@
+package com.example.day03_03_loadcase.utils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+public class utils {
+	
+	public boolean saveInfo(String username, String pwd) {
+		String Info = username + "##" + pwd;
+		File file = new File("data/data/day03_03_loadCase/info.text");
+		FileOutputStream fos = new FileOutputStream(file);
+		
+	}
+
+}

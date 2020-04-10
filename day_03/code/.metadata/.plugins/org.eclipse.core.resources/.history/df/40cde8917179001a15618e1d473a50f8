@@ -1,0 +1,5 @@
+package com.example.day03_02_androidlogcat;
+
+public class LogUtils {
+
+}

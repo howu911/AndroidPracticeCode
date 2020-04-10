@@ -1,0 +1,4 @@
+1586335493689	Convert local variable 'EditText' to field
+1586335504954	Convert local variable 'et_pwd' to field
+1586335513003	Convert local variable 'cb_isSave' to field
+1586335518696	Convert local variable 'btn_login' to field

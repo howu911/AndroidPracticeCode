@@ -1,0 +1,5 @@
+package day04_01_JDBC_helloworld;
+
+public class JdbcHello {
+
+}

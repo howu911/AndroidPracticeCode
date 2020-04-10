@@ -1,0 +1,36 @@
+package com.example.day03_02_androidlogcat;
+
+import android.util.Log;
+
+public class LogUtils {
+	private static boolean openLogD = false;
+	private static boolean openLogV = true;
+	private static boolean openLogE = false;
+	
+	public static void LOGD(String tag, String msg) {
+		if(openLogD) {
+			Log.d(tag, msg);
+		}
+	}
+	public static void LOGV(String tag, String msg) {
+		if(openLogV) {
+			Log.d(tag, msg);
+		}
+	}
+	public static void LOGI(String tag, String msg) {
+		if(openLogD) {
+			Log.d(tag, msg);
+		}
+	}
+	public static void LOGW(String tag, String msg) {
+		if(openLogD) {
+			Log.d(tag, msg);
+		}
+	}
+	public static void LOGE(String tag, String msg) {
+		if(openLogE) {
+			Log.d(tag, msg);
+		}
+	}
+
+}

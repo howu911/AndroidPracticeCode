@@ -1,0 +1,8 @@
+package com.example.day03_01_androidunittest;
+
+public class MyMath {
+	public void add(int i, int j) {
+		return i+j;
+	}
+
+}

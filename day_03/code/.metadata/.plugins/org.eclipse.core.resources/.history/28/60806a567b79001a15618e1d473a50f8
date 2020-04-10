@@ -1,0 +1,12 @@
+package com.example.day03_03_loadcase.utils;
+
+import java.io.File;
+
+public class utils {
+	
+	public boolean saveInfo(String username, String pwd) {
+		String Info = username + "##" + pwd;
+		File file = new File("data/data/")
+	}
+
+}

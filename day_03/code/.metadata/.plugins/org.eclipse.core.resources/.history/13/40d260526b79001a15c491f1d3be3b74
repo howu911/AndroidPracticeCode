@@ -1,0 +1,13 @@
+package com.example.day03_01_androidunittest;
+
+import android.test.AndroidTestCase;
+
+public class MyMathTest extends AndroidTestCase{
+	
+	public void testAdd() {
+		MyMath myMath = new MyMath();
+		int result = myMath.add(3, 3);
+		assertEquals(8, result);
+}
+
+}

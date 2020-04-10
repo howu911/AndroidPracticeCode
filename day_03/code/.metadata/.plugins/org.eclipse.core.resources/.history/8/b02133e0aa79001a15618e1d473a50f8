@@ -1,0 +1,85 @@
+package com.example.day03_06_serializexml;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends Activity {
+	ArrayList<SMS> smsList = new ArrayList<SMS>();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		for(int i = 0;i<30;i++){
+        	SMS sms = new SMS();
+        	sms.from= "10000"+i;
+        	sms.content="content"+i;
+        	sms.time="2016-9-4 16:25:"+i;
+        	smsList.add(sms);
+        }
+        
+        for(SMS sms: smsList){
+        	System.out.println(sms);
+        }
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	public void saveSMS(View v){
+    	StringBuilder sb = new StringBuilder();
+    	//写xml的文档声明
+    	sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+    	sb.append("<SMSList>");
+    	for(SMS sms:smsList){
+    		//写每一个sms开始的标签
+    		sb.append("<SMS>");
+    		
+    		//一个属性一个属性写对应的节点
+    		sb.append("<from>");
+    		sb.append(sms.from);
+    		sb.append("</from>");
+    		
+    		sb.append("<content>");
+    		sb.append(sms.content);
+    		sb.append("</content>");
+    		
+    		sb.append("<time>");
+    		sb.append(sms.time);
+    		sb.append("</time>");
+    		
+    		sb.append("</SMS>");
+    	}
+    	sb.append("</SMSList>");
+    	
+    	String xml = sb.toString();
+    	try {
+			FileOutputStream fos = openFileOutput("sms.xml", MODE_PRIVATE);
+			fos.write(xml.getBytes());
+			fos.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+}
