@@ -1,0 +1,28 @@
+package com.example.day05_01_hellosqlite;
+
+import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends Activity {
+
+	private MyOpenHelper openHelper;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		openHelper = new MyOpenHelper(this);
+	}
+	
+	public void insert(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String sql = "";
+		database.execSQL(sql);
+	}
+}
+
+

@@ -1,0 +1,151 @@
+package com.example.day05_01_hellosqlite;
+
+import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	private MyOpenHelper openHelper;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		openHelper = new MyOpenHelper(this,5);
+		//SQLiteDatabase database = openHelper.getReadableDatabase();
+	}
+	
+	public void insert(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String sql = "insert into info (name,phone,age) values('zhangsan','13888888888',30)";
+		database.execSQL(sql );
+		sql = "insert into info (name,phone,age) values('lisi','13999999999',20)";
+		database.execSQL(sql);
+		database.execSQL("insert into info ('name','phone','age') values ('张三','138888','2000')");
+		database.execSQL("insert into info ('name','phone','age') values ('李四','139999','5000')");
+
+		database.close();
+	}
+	
+	public void query(View v) {
+		SQLiteDatabase database = openHelper.getWritableDatabase();
+		String sql = "select * from info";
+		Cursor cursor = database.rawQuery(sql, null);
+		// 查询之后的结果 返回一个游标 Cursor 通过游标可以访问整个结果集
+		// 游标默认也是指向所有结果之前的一行 可以通过moveToNext()方法 移动游标
+		while (cursor.moveToNext()) {
+			// 可以通过 getXXX方法 通过列的索引取出当前行某一列的值 需要注意 这个列的索引是从0开始的
+			String name = cursor.getString(1);
+			// 可以通过列的名字获取列的索引 getColumnIndex
+			String phone = cursor.getString(cursor.getColumnIndex("phone"));
+			System.out.println("name=" + name + "phone=" + phone);
+		}
+		cursor.close();
+		database.close();
+
+	}
+
+	public void delete(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String sql = "delete from info where name = 'lisi'";
+		database.execSQL(sql);
+		database.close();
+
+	}
+
+	public void update(View v) {
+		SQLiteDatabase database = openHelper.getWritableDatabase();
+		String sql = "update info set phone='1234567' where name ='zhangsan'";
+		database.execSQL(sql);
+		database.close();
+
+	}
+	
+	public void insert1(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String nullColumnHack = null;
+		ContentValues values = new ContentValues();
+		values.put("name", "lisi");
+		values.put("phone", "13777777777");
+		values.put("age", 25);
+		long id = database.insert("info", nullColumnHack, values);
+		if(id != -1){
+			Toast.makeText(this, "当前插入到了第"+id+"行", Toast.LENGTH_SHORT).show();
+		}else{
+			Toast.makeText(this, "插入数据失败", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	public void delete1(View v) {
+		SQLiteDatabase database = openHelper.getWritableDatabase();
+		//表名字
+		String table = "info";
+		//where 的条件 需要注意 这里不能包含where关键字 =后面的条件要用?替换
+		String whereClause = "name = ?";
+		//具体要满足的条件的值 用来替换?
+		String[] whereArgs = {"lisi"};
+		int delete = database.delete(table, whereClause, whereArgs);
+		//delete方法返回值 是当前delete语句删除了几条数据
+		//弹吐司的时候 第二个参数可以接受一个int类型的数据 这个int类型的值 应该对应着一个R.String.XXX这样的资源id
+		//不能传一个普通的int
+		Toast.makeText(this, "删除了"+delete+"条数据", Toast.LENGTH_SHORT).show();
+		database.close();
+	}
+
+	public void update1(View v) {
+		//update info set phone = '110' where name = 'zhangsan';
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		ContentValues values = new ContentValues();
+		values.put("phone", "110");
+		//第一个参数 表名
+		//第二个参数 ContentValues 用来封装set 后面传入的需要修改的值
+		//第三个参数 where 条件语句 不用写where 具体的值用?替代
+		//第四个参数 where 条件中?对应的值
+		//返回值是究竟更新了几行数据
+		int update = database.update("info", values, "name = ?", new String[]{"zhangsan"});
+		Toast.makeText(this, "更新了"+update+"行数据", Toast.LENGTH_SHORT).show();
+		database.close();
+	}
+
+	public void query1(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		Cursor cursor = database.query("info", new String[]{"name","phone"}, "name = ?", new String[]{"zhangsan"}, null, null, null, null);
+		while(cursor.moveToNext()){
+			String phone = cursor.getString(1);
+			Toast.makeText(this, phone, Toast.LENGTH_SHORT).show();
+		}
+		cursor.close();
+		database.close();
+	}
+	
+	//数据库事务对应代码
+	public void transact(View v){
+    	SQLiteDatabase db = openHelper.getReadableDatabase();
+    	//开启事务
+    	 db.beginTransaction();
+    	   try {
+    		   //把所有跟事务相关的操作都放到try代码块中
+    		   db.execSQL("update info set money= money-200 where name=?",new String[]{"张三"});
+    			//int i = 100/0;
+    			db.execSQL("update info set money= money+200 where name=?",new String[]{"李四"});
+    			//所有跟事务相关的操作都结束了调用setTransactionSuccessful 标记事务成功
+    	     db.setTransactionSuccessful();
+    	   } catch (Exception e) {
+    		   Toast.makeText(this, "服务器忙,异常码(18876)", Toast.LENGTH_SHORT).show();
+		}finally {
+			//事务结束 , 首先检查 是否设置事务成功的标记 如果有成功标记 就提交所有的修改
+			//如果没发现成功的标记 回滚到初始状态
+    	     db.endTransaction();
+    	     db.close();
+    	   }
+    }
+}
+
+

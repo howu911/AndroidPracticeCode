@@ -1,0 +1,20 @@
+package com.example.day05_02_listviewshow;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+public class MainActivity extends Activity {
+
+	private MyopenHelper openHelper;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		openHelper = new MyopenHelper(this);
+	}
+
+	
+}

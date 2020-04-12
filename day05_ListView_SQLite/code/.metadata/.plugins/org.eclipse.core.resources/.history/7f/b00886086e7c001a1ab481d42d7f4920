@@ -1,0 +1,38 @@
+package com.example.day05_01_hellosqlite;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class MyOpenHelper extends SQLiteOpenHelper {
+
+	public MyOpenHelper(Context context) {
+		//第一个参数上下文
+		//第二个参数 数据库的名字 如果传入null 就是在内存中创建一个数据库 内存中的数据库在应用退出之后 数据就会丢失
+		//第三个参数 游标工厂 如果使用系统默认的游标工厂就传入null
+		//第四个参数  数据库的版本号 用版本号来控制数据库的升级和降级  版本号从1开始
+		super(context, "students.db", null, 1);
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		db.execSQL("create table info(_id integer primary key autoincrement,name varchar(20),phone varchar(20))");
+		System.out.println("onCreate被调用");
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+		switch (oldVersion) {
+		case 1:
+			db.execSQL("alter table info add age integer");
+			System.out.println("onupgrade  oldVersion"+oldVersion+"newVersion"+newVersion);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+}

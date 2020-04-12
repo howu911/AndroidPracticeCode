@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Convert local variable &apos;com.example.day05_01_hellosqlite.MainActivity.onCreate().openHelper&apos; in &apos;com.example.day05_01_hellosqlite.MainActivity.onCreate()&apos; to field&#x0D;&#x0A;- Original project: &apos;day05_01_helloSQLite&apos;&#x0D;&#x0A;- Original element: &apos;com.example.day05_01_hellosqlite.MainActivity.onCreate().openHelper&apos;&#x0D;&#x0A;- Field name: &apos;openHelper&apos;&#x0D;&#x0A;- Initialize field in method&#x0D;&#x0A;- Declared visibility: &apos;private&apos;" description="Convert local variable &apos;openHelper&apos; to field" final="false" flags="2" id="org.eclipse.jdt.ui.promote.temp" initialize="1" input="/src&lt;com.example.day05_01_hellosqlite{MainActivity.java" name="openHelper" selection="449 35" stamp="1586611537564" static="false" version="1.0" visibility="2"/>
+</session>

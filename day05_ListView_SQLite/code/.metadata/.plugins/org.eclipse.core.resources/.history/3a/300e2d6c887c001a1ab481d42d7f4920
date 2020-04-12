@@ -1,0 +1,84 @@
+package com.example.day05_01_hellosqlite;
+
+import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	private MyOpenHelper openHelper;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		openHelper = new MyOpenHelper(this,5);
+		//SQLiteDatabase database = openHelper.getReadableDatabase();
+	}
+	
+	public void insert(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String sql = "insert into info (name,phone,age) values('zhangsan','13888888888',30)";
+		database.execSQL(sql );
+		sql = "insert into info (name,phone,age) values('lisi','13999999999',20)";
+		database.execSQL(sql);
+		database.close();
+	}
+	
+	public void query(View v) {
+		SQLiteDatabase database = openHelper.getWritableDatabase();
+		String sql = "select * from info";
+		Cursor cursor = database.rawQuery(sql, null);
+		// 查询之后的结果 返回一个游标 Cursor 通过游标可以访问整个结果集
+		// 游标默认也是指向所有结果之前的一行 可以通过moveToNext()方法 移动游标
+		while (cursor.moveToNext()) {
+			// 可以通过 getXXX方法 通过列的索引取出当前行某一列的值 需要注意 这个列的索引是从0开始的
+			String name = cursor.getString(1);
+			// 可以通过列的名字获取列的索引 getColumnIndex
+			String phone = cursor.getString(cursor.getColumnIndex("phone"));
+			System.out.println("name=" + name + "phone=" + phone);
+		}
+		cursor.close();
+		database.close();
+
+	}
+
+	public void delete(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String sql = "delete from info where name = 'lisi'";
+		database.execSQL(sql);
+		database.close();
+
+	}
+
+	public void update(View v) {
+		SQLiteDatabase database = openHelper.getWritableDatabase();
+		String sql = "update info set phone='1234567' where name ='zhangsan'";
+		database.execSQL(sql);
+		database.close();
+
+	}
+	
+	public void insert1(View v) {
+		SQLiteDatabase database = openHelper.getReadableDatabase();
+		String nullColumnHack = null;
+		ContentValues values = new ContentValues();
+		values.put("name", "lisi");
+		values.put("phone", "13777777777");
+		values.put("age", 25);
+		long id = database.insert("info", nullColumnHack, values);
+		if(id != -1){
+			Toast.makeText(this, "当前插入到了第"+id+"行", Toast.LENGTH_SHORT).show();
+		}else{
+			Toast.makeText(this, "插入数据失败", Toast.LENGTH_SHORT).show();
+		}
+	}
+}
+
+
